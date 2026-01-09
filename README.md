@@ -19,30 +19,27 @@ Serwis obsługujący płatności przez Stripe API. Wykorzystuje Stripe Checkout 
 
 ### 2. Skonfiguruj zmienne środowiskowe
 
-#### Opcja A: Plik .env (ZALECANA dla lokalnego developmentu)
-1. Skopiuj plik `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
-2. Edytuj `.env` i wpisz swój klucz Stripe:
-   ```bash
-   STRIPE_SECRET_KEY=sk_test_twoj_klucz_testowy_z_stripe
-   ```
-3. **UWAGA**: Plik `.env` jest w `.gitignore` - nie zostanie commitowany do repozytorium!
-
-#### Opcja B: IntelliJ IDEA - Environment Variables
+#### Opcja A: IntelliJ IDEA (ZALECANA)
 1. Otwórz **Run → Edit Configurations**
 2. Wybierz konfigurację `PaymentServiceApplication`
-3. W sekcji **Environment Variables** dodaj:
+3. W sekcji **Environment Variables** kliknij ikonę edycji i dodaj:
    ```
    STRIPE_SECRET_KEY=sk_test_twoj_klucz_testowy_z_stripe
    ```
 4. Kliknij **Apply** i **OK**
 
-#### Opcja C: Windows PowerShell (tymczasowo dla sesji)
+#### Opcja B: Windows PowerShell (tymczasowo dla bieżącej sesji)
 ```powershell
 $env:STRIPE_SECRET_KEY="sk_test_twoj_klucz_testowy_z_stripe"
 mvn spring-boot:run
+```
+
+#### Opcja C: Docker Compose (dla produkcji)
+Przekaż zmienną środowiskową w `docker-compose.yml`:
+```yaml
+payment-service:
+  environment:
+    - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
 ```
 
 ### 3. Uruchom serwis
@@ -57,8 +54,8 @@ docker-compose up payment-service
 ## Bezpieczeństwo
 ⚠️ **NIGDY NIE COMMITUJ KLUCZY API DO REPOZYTORIUM!**
 - Wszystkie klucze trzymaj w zmiennych środowiskowych
-- Plik `.env` jest w `.gitignore`
 - Każdy członek zespołu ma swój własny klucz testowy Stripe
+- Plik `.env.example` pokazuje jakie zmienne są wymagane
 
 ## Endpointy API
 
