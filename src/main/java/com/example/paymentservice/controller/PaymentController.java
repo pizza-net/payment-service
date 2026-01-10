@@ -76,5 +76,33 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PostMapping("/verify-session")
+    public ResponseEntity<PaymentResponse> verifySession(@RequestBody VerifySessionRequest request) {
+        try {
+            log.info("Verifying session: {}", request.getSessionId());
+            PaymentResponse response = paymentService.handleSuccessfulPayment(request.getSessionId());
+            return ResponseEntity.ok(response);
+        } catch (StripeException e) {
+            log.error("Stripe error while verifying session", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (Exception e) {
+            log.error("Error verifying session", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // DTO for verify-session request
+    public static class VerifySessionRequest {
+        private String sessionId;
+
+        public String getSessionId() {
+            return sessionId;
+        }
+
+        public void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+        }
+    }
 }
 
